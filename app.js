@@ -1,23 +1,29 @@
-const express = require('express');
+const express = require("express");
 const app = express();
-const port = process.env.PORT || 8000;
-const router = require('./router/index');;
-const path = require('path');
+const port = process.env.PORT || 5000;
+const router = require("./router/index");
+const path = require("path");
 
-const indexRouter = require('./routes/index');
-const userRouter = require('./routes/users');
 // 보안 관련
 // const morgan = require('morgan');
 // const session = require('cookie-session');
 // const helmet = require('helmet');
-// const hpp = require('hpp') 
+// const hpp = require('hpp')
+
+app.listen(port, () => {
+  console.log("server on");
+  console.log(port);
+});
 
 //body parsing관련 부분
-app.use(express.json())
-app.use(express.urlencoded({extended:false}));
-app.use('/', indexRouter)
-app.use('/user', userRouter)
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(router);
+router.use("/api", router);
 
+//라우터 관련 부분
+
+// 세션 관련
 // const sessionOption = {
 //     resave:false,
 //     saveUninitialized:false,
@@ -36,4 +42,3 @@ app.use('/user', userRouter)
 // } else {
 //     app.use(morgan('dev')); //development mode
 // }
-

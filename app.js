@@ -1,9 +1,14 @@
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 5000;
-const router = require("./router/index");
-const path = require("path");
 
+const path = require("path");
+const session = require("cookie-session");
+const passport = require("passport");
+
+const router = require("./router/index");
+const { sequelize } = require("./models");
+const passportConfig = require("./passport");
 // 보안 관련
 // const morgan = require('morgan');
 // const session = require('cookie-session');
@@ -15,24 +20,37 @@ app.listen(port, () => {
   console.log(port);
 });
 
+const sessionOption = {
+  resave: false,
+  saveUninitialized: false,
+  secret: "gdsc-secret",
+  cookie: {
+    httpOnly: true,
+    secure: false,
+  },
+};
+
 //body parsing관련 부분
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use(session(sessionOption));
+app.use(passport.initialize());
+app.use(passport.session());
+passportConfig();
+
 app.use(router);
+
 router.use("/api", router);
 
-//라우터 관련 부분
-
-// 세션 관련
-// const sessionOption = {
-//     resave:false,
-//     saveUninitialized:false,
-//     secret:process.env.COOKIE_SECRET,
-//     cookie:{
-//         httpOnly:true,
-//         secure:false,
-//     },
-// };
+sequelize
+  .sync({ alter: true })
+  .then(() => {
+    console.log("sequelize on");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 // 배포 과정
 // if(process.env.NODE_ENV === 'production') {

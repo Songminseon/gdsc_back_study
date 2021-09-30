@@ -52,6 +52,8 @@ sequelize
     console.log(err);
   });
 
+console.log(process.env.NODE_ENV, "env test");
+
 // 배포 과정
 // if(process.env.NODE_ENV === 'production') {
 //     app.use(morgan('combined')); //record more records related to user experience

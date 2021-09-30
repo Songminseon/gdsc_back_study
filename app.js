@@ -17,7 +17,7 @@ const passportConfig = require("./passport");
 
 app.listen(port, () => {
   console.log("server on");
-  console.log(port);
+  console.log(port, "port");
 });
 
 const sessionOption = {

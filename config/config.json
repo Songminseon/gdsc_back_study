@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": "!t1621711",
+    "password": "",
     "database": "gdsc_back",
     "host": "127.0.0.1",
     "dialect": "mysql",

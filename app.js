@@ -17,6 +17,18 @@ const passportConfig = require("./passport");
 // const helmet = require('helmet');
 // const hpp = require('hpp')
 
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "18.212.221.139");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  next();
+});
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
+
 app.listen(port, () => {
   console.log("server on");
   console.log(port, "port");

@@ -21,6 +21,7 @@
     "sequelize": "^6.6.5"
   },
   "devDependencies": {
+    "react-app-rewired": "^2.1.8",
     "sequelize-cli": "^6.2.0"
   }
 }

@@ -5,7 +5,10 @@ const passport = require("passport");
 
 const { isLoggedIn, isNotLoggedIn } = require("../middleware");
 const userService = require("../services/user");
-const common = require("../services/common");
+
+router.get("/test", (req, res) => {
+  return res.send({ test: "good" });
+});
 
 router.get("/", isLoggedIn, async (req, res) => {
   const result = await userService.getUser(req.user.id);

@@ -24,7 +24,6 @@ module.exports = (sequelize, DataTypes) => {
       is_auth: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        default: false,
       },
     },
     { timestamps: true, underscored: true }

@@ -1,3 +1,5 @@
+const Op = require("sequelize").Op;
+
 const { User, EmailAuth } = require("../models/index");
 const common = require("./common");
 
@@ -39,11 +41,12 @@ exports.deleteUser = async (userId) => {
   });
 };
 
-exports.getEmail = async (email, userId) => {
+exports.uploadEmail = async (email, userId) => {
   return await EmailAuth.create({
     email: email,
     code: common.getRandomCode(),
     user_id: userId,
+    is_auth: false,
   });
 };
 

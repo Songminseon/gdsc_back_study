@@ -3,8 +3,10 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 const path = require("path");
-const session = require("cookie-session");
+const session = require("express-session");
+const MySQLStore = require("express-mysql-session")(session);
 const passport = require("passport");
+const dbconfig = require("./config/database");
 
 const router = require("./router/index");
 const { sequelize } = require("./models");
@@ -21,13 +23,13 @@ app.listen(port, () => {
 });
 
 const sessionOption = {
-  resave: false,
-  saveUninitialized: false,
-  secret: "gdsc-secret",
-  cookie: {
-    httpOnly: true,
-    secure: false,
-  },
+  secret: "gsdc-secret",
+  name: "sessionId",
+  resave: false, //false 권고
+  rolling: true,
+  secure: false,
+  httpOnly: true,
+  store: new MySQLStore(dbconfig.connection),
 };
 
 //body parsing관련 부분

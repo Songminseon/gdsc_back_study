@@ -1,3 +1,4 @@
+const Op = require("sequelize").Op;
 const { Message } = require("../models");
 
 exports.getMessage = async (userId) => {
@@ -5,12 +6,10 @@ exports.getMessage = async (userId) => {
     where: {
       [Op.or]: [
         {
-          from_id: fromId,
-          to_id: toId,
+          from_id: userId,
         },
         {
-          from_id: toId,
-          to_id: fromId,
+          to_id: userId,
         },
       ],
     },

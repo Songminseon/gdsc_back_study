@@ -1,9 +1,18 @@
 const { Liked } = require("../models");
 
-exports.isLiked = () => {
-  return true;
+exports.isLiked = async (category, refId) => {
+  return await Liked.findOne({
+    where: {
+      like_category: category,
+      ref_id: refId,
+    },
+  });
 };
 
-exports.pushLike = () => {
-  return true;
+exports.pushLike = async (userId, category, refId) => {
+  return await Liked.create({
+    like_category: category,
+    ref_id: refId,
+    user_id: userId,
+  });
 };

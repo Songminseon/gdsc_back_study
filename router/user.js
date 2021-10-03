@@ -5,6 +5,7 @@ const passport = require("passport");
 
 const { isLoggedIn, isNotLoggedIn } = require("../middleware");
 const userService = require("../services/user");
+const common = require("../services/common");
 
 router.get("/", isLoggedIn, async (req, res) => {
   const result = await userService.getUser(req.user.id);
@@ -94,7 +95,7 @@ router.post("/login", isNotLoggedIn, async (req, res, next) => {
   })(req, res, next);
 });
 
-router.get("/logout", async (req, res) => {
+router.get("/logout", isLoggedIn, async (req, res) => {
   req.logout();
   req.session.destroy();
   res.status(200).json({
@@ -105,7 +106,7 @@ router.get("/logout", async (req, res) => {
 router.post("/email", async (req, res) => {
   const { email } = req.body;
 
-  const result = userService.getEmail(email, req.user.id);
+  const result = userService.uploadEmail(email, req.user.id);
   if (result) {
     return res.status(200).send({
       success: true,

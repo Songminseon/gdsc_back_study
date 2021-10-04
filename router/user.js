@@ -10,6 +10,10 @@ router.get("/test", (req, res) => {
   return res.send({ test: "good" });
 });
 
+router.get("/test2", (req, res) => {
+  return res.send({ tset: req.user });
+});
+
 router.get("/", isLoggedIn, async (req, res) => {
   const result = await userService.getUser(req.user.id);
 

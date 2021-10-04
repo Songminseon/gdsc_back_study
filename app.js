@@ -18,11 +18,6 @@ const passportConfig = require("./passport");
 // const helmet = require('helmet');
 // const hpp = require('hpp')
 
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "18.212.221.139");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  next();
-});
 app.use(
   cors({
     origin: true,
@@ -40,7 +35,7 @@ const sessionOption = {
   name: "sessionId",
   resave: false, //false 권고
   rolling: true,
-  secure: false,
+  secure: true,
   httpOnly: true,
   store: new MySQLStore(dbconfig.connection),
 };

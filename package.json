@@ -3,7 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=development nodemon app.js"
+    "start": "cross-env NODE_ENV=development nodemon app.js",
+    "migrate": "sequelize db:migrate",
+    "seed": "sequelize db:seed:all",
+    "seed-rollback": "sequelize db:seed:undo:all",
+    "seed-prod  ": "cross-env NODE_ENV=production sequelize db:seed:all",
+    "seed-debug": "cross-env NODE_ENV=development sequelize db:seed:all --debug",
+    "migrate:prd": "sequelize db:migrate"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",

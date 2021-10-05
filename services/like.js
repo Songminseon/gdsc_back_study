@@ -1,10 +1,11 @@
 const { Liked } = require("../models");
 
-exports.isLiked = async (category, refId) => {
-  return await Liked.findOne({
+exports.isLiked = async (category, refId, userId) => {
+  return await Liked.findAll({
     where: {
       like_category: category,
       ref_id: refId,
+      user_id: userId,
     },
   });
 };

@@ -3,12 +3,13 @@ const app = express();
 const router = express.Router();
 
 const likeService = require("../services/like");
+const boardService = require("../services/board");
 
-router.get("/:category/:ref", async (req, res) => {
+router.get("/:category/:refId", async (req, res) => {
   const category = req.params.category;
-  const refId = req.params.ref;
+  const refId = req.params.refId;
 
-  const result = await likeService.isLiked(category, refId);
+  const result = await likeService.isLiked(category, refId, req.user.id);
 
   if (result) {
     if (result.length === 0) {
@@ -34,10 +35,10 @@ router.get("/:category/:ref", async (req, res) => {
 
 router.post("/", async (req, res) => {
   const { category, refId } = req.body;
-
   const result = await likeService.pushLike(req.user.id, category, refId);
 
   if (result) {
+    boardService.updateBoardLike(refId);
     return res.status(200).send({
       success: true,
       data: {},

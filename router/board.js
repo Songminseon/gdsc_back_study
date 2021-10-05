@@ -6,9 +6,9 @@ const boardService = require("../services/board");
 
 router.get("/:category", async (req, res) => {
   const category = req.params.category;
-
+  console.log(category, "ceh");
   const result = await boardService.getBoardByCategory(category);
-
+  console.log(result);
   if (result) {
     return res.status(200).send({
       success: true,

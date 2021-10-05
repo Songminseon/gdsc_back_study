@@ -5,17 +5,53 @@ const { Board, Comment, User } = require("../models");
 exports.getBoardByCategory = async (category) => {
   return await Board.findAll({
     where: {
-      category,
+      board_category_id: category,
     },
   });
 };
 
 exports.getBoardById = async (boardId) => {
   return await Board.findOne({
+    attributes: [
+      "board_category_id",
+      "created_at",
+      "title",
+      "content",
+      "like_num",
+      "comment_num",
+    ],
+    where: {
+      id: boardId,
+    },
+    include: [
+      {
+        model: User,
+        attributes: ["nickname"],
+      },
+    ],
+  });
+};
+
+exports.updateBoardLike = async (boardId) => {
+  const prevBoard = await Board.findOne({
+    attributes: ["like_num"],
     where: {
       id: boardId,
     },
   });
+
+  const prevNum = prevBoard.like_num;
+
+  await Board.update(
+    {
+      like_num: prevNum + 1,
+    },
+    {
+      where: {
+        id: boardId,
+      },
+    }
+  );
 };
 
 exports.createBoard = async (category, userId, title, content, isSecret) => {
@@ -30,6 +66,7 @@ exports.createBoard = async (category, userId, title, content, isSecret) => {
 
 exports.getComment = async (boardId) => {
   return await Comment.findAll({
+    attributes: ["created_at", "content"],
     where: {
       board_id: boardId,
     },
@@ -39,6 +76,7 @@ exports.getComment = async (boardId) => {
         attributes: ["nickname"],
       },
     ],
+    underscored: true,
   });
 };
 

@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       title: {
         type: DataTypes.STRING,
         allowNull: false,
+        default: "제목 없음",
       },
       content: {
         type: DataTypes.TEXT,
@@ -28,7 +29,12 @@ module.exports = (sequelize, DataTypes) => {
       like_num: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaut: 0,
+        default: 0,
+      },
+      comment_num: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        default: 0,
       },
     },
     { timestamps: true, underscored: true }

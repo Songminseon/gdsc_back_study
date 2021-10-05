@@ -52,19 +52,19 @@ db.Liked = require("./Liked")(sequelize, Sequelize);
 db.Message = require("./Message")(sequelize, Sequelize);
 db.EmailAuth = require("./EmailAuth")(sequelize, Sequelize);
 
-db.Board.belongsTo(db.User); //유저 1명이 여러개의 게시 가능
-db.Board.belongsTo(db.BoardCategory); //카테고리 1개가 여러 게시 가능
+db.Board.belongsTo(db.User, { foreignKey: "user_id" }); //유저 1명이 여러개의 게시 가능
+db.Board.belongsTo(db.BoardCategory, { foreignKey: "board_category_id" }); //카테고리 1개가 여러 게시 가능
 
-db.Comment.belongsTo(db.Board);
-db.Comment.belongsTo(db.User);
+db.Comment.belongsTo(db.Board, { foreignKey: "board_id" });
+db.Comment.belongsTo(db.User, { foreignKey: "user_id" });
 
-db.Recomment.belongsTo(db.Comment);
-db.Recomment.belongsTo(db.User);
-db.EmailAuth.belongsTo(db.User);
+db.Recomment.belongsTo(db.Comment, { foreignKey: "comment_id" });
+db.Recomment.belongsTo(db.User, { foreignKey: "user_id" });
+db.EmailAuth.belongsTo(db.User, { foreignKey: "user_id" });
 
-db.Liked.belongsTo(db.User);
+db.Liked.belongsTo(db.User, { foreignKey: "user_id" });
 
-db.Message.belongsTo(db.User, { as: "from" });
-db.Message.belongsTo(db.User, { as: "to" });
+db.Message.belongsTo(db.User, { foreignKey: "from_id" });
+db.Message.belongsTo(db.User, { foreignKey: "to_id" });
 
 module.exports = db;

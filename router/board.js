@@ -6,9 +6,14 @@ const boardService = require("../services/board");
 
 router.get("/:category", async (req, res) => {
   const category = req.params.category;
-  console.log(category, "ceh");
-  const result = await boardService.getBoardByCategory(category);
-  console.log(result);
+  let result;
+
+  if (category === "7") {
+    result = await boardService.getHotBoard((isLimit = false));
+  } else {
+    result = await boardService.getBoardByCategory(category);
+  }
+
   if (result) {
     return res.status(200).send({
       success: true,
@@ -27,6 +32,11 @@ router.get("/detail/:id", async (req, res) => {
   const boardId = req.params.id;
 
   const result = await boardService.getBoardById(boardId);
+  const isSecret = result.is_secret;
+
+  if (isSecret) {
+    result.User.nickname = "익명";
+  }
 
   if (result) {
     return res.status(200).send({
@@ -37,6 +47,61 @@ router.get("/detail/:id", async (req, res) => {
     return res.status(400).send({
       success: false,
       data: {},
+    });
+  }
+});
+
+router.get("/main/myboard", async (req, res) => {
+  const result = await boardService.getMainBoard();
+  if (result) {
+    return res.status(200).send({
+      success: true,
+      data: result,
+    });
+  } else {
+    return res.status(400).send({
+      success: false,
+      data: {},
+    });
+  }
+});
+
+router.get("/main/hot", async (req, res) => {
+  const result = await boardService.getHotBoard((isLimit = true));
+  if (result) {
+    return res.status(200).send({
+      success: true,
+      data: result,
+    });
+  } else {
+    return res.status(400).send({
+      success: false,
+      data: {},
+      message: "server error",
+    });
+  }
+});
+
+router.get("/main/realtime", async (req, res) => {
+  const result = await boardService.getRealtimeBoard();
+
+  for (let i = 0; i < result.length; i++) {
+    const isSecret = result[i].is_secret;
+    if (isSecret) {
+      result[i].nickname = "익명";
+    }
+  }
+
+  if (result) {
+    return res.status(200).send({
+      success: true,
+      data: result,
+    });
+  } else {
+    return res.status(400).send({
+      success: false,
+      data: {},
+      message: "server error",
     });
   }
 });
@@ -69,6 +134,12 @@ router.post("/", async (req, res) => {
 router.get("/:id/comment", async (req, res) => {
   const boardId = req.params.id;
   const result = await boardService.getComment(boardId);
+
+  for (let i = 0; i < result.length; i++) {
+    if (result[i].is_secret) {
+      result[i].User.nickname = "익명";
+    }
+  }
 
   if (result) {
     return res.status(200).send({
@@ -107,18 +178,16 @@ router.post("/comment", async (req, res) => {
   }
 });
 
-router.get("/hot-main", async (req, res) => {
-  return;
-});
-
-router.get("/hot-list", async (req, res) => {
-  return;
-});
-
 router.post("/search", async (req, res) => {
   const { word } = req.body;
   const result = await boardService.searchBoard(word);
 
+  for (let i = 0; i < result.length; i++) {
+    const isSecret = result[i].is_secret;
+    if (isSecret) {
+      result[i].User.nickname = "익명";
+    }
+  }
   if (result) {
     return res.status(200).send({
       success: true,

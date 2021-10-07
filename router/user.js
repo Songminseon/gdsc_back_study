@@ -90,7 +90,6 @@ router.post("/login", isNotLoggedIn, async (req, res, next) => {
     }
     if (!err && user) {
       req.logIn(user, (err) => {
-        console.log(err);
         if (err) {
           return res.status(400).json(err);
         }

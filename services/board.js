@@ -70,6 +70,18 @@ exports.getBoardById = async (boardId) => {
   });
 };
 
+exports.getFilterBoard = async (category, isHot) => {
+  return await Board.findAll({
+    attributes: ["id", "title", "like_num", "comment_num", "created_at"],
+    where: {
+      board_category_id: parseInt(category),
+      is_hot: parseInt(isHot),
+    },
+    limit: 2,
+    order: [["created_at", "DESC"]],
+  });
+};
+
 exports.updateBoardLike = async (boardId) => {
   const prevBoard = await Board.findOne({
     attributes: ["like_num"],
@@ -83,6 +95,28 @@ exports.updateBoardLike = async (boardId) => {
   await Board.update(
     {
       like_num: prevNum + 1,
+    },
+    {
+      where: {
+        id: boardId,
+      },
+    }
+  );
+};
+
+exports.updateBoardComment = async (boardId) => {
+  const prevBoard = await Board.findOne({
+    attributes: ["comment_num"],
+    where: {
+      id: boardId,
+    },
+  });
+
+  const prevNum = prevBoard.comment_num;
+
+  await Board.update(
+    {
+      comment_num: prevNum + 1,
     },
     {
       where: {
@@ -124,6 +158,7 @@ exports.createComment = async (userId, boardId, content, isSecret) => {
     board_id: boardId,
     content: content,
     is_secret: isSecret,
+    like_num: 0,
   });
 };
 

@@ -24,22 +24,22 @@ module.exports = (sequelize, DataTypes) => {
       is_secret: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        default: false,
+        defaultValue: false,
       },
       like_num: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        default: 0,
+        defaultValue: 0,
       },
       comment_num: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        default: 0,
+        defaultValue: 0,
       },
       is_hot: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        default: false,
+        defaultValue: false,
       },
     },
     { timestamps: true, underscored: true }

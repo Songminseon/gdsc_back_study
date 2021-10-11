@@ -106,6 +106,26 @@ router.get("/main/realtime", async (req, res) => {
   }
 });
 
+router.get("/main/filter", async (req, res) => {
+  const category = req.query.category;
+  const isHot = req.query.hot;
+
+  const result = await boardService.getFilterBoard(category, isHot);
+
+  if (result) {
+    return res.status(200).send({
+      success: true,
+      data: result,
+    });
+  } else {
+    return res.status(400).send({
+      success: false,
+      data: {},
+      message: "server error",
+    });
+  }
+});
+
 router.post("/", async (req, res) => {
   const { category_id, title, content, is_secret } = req.body;
 
@@ -157,6 +177,7 @@ router.get("/:id/comment", async (req, res) => {
 
 router.post("/comment", async (req, res) => {
   const { board_id, content, is_secret } = req.body;
+
   const result = await boardService.createComment(
     req.user.id,
     board_id,
@@ -165,6 +186,7 @@ router.post("/comment", async (req, res) => {
   );
 
   if (result) {
+    boardService.updateBoardComment(board_id);
     return res.status(200).send({
       success: true,
       data: {},

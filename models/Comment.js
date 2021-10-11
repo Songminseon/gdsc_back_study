@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       like_num: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        default: 0,
+        defaultValue: 0,
       },
     },
     { timestamps: true, underscored: true }

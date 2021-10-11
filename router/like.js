@@ -10,7 +10,7 @@ router.get("/:category/:refId", async (req, res) => {
   const refId = req.params.refId;
 
   const result = await likeService.isLiked(category, refId, req.user.id);
-
+  console.log(result);
   if (result) {
     if (result.length === 0) {
       return res.status(200).send({
@@ -38,7 +38,14 @@ router.post("/", async (req, res) => {
   const result = await likeService.pushLike(req.user.id, category, refId);
 
   if (result) {
-    boardService.updateBoardLike(refId);
+    if (category === "1") {
+      //게시판 좋아요
+      boardService.updateBoardLike(refId);
+    } else {
+      //댓글 좋아요
+      boardService.updateCommentLike(refId);
+    }
+
     return res.status(200).send({
       success: true,
       data: {},

@@ -104,6 +104,28 @@ exports.updateBoardLike = async (boardId) => {
   );
 };
 
+exports.updateCommentLike = async (commentId) => {
+  const prevComment = await Comment.findOne({
+    attributes: ["like_num"],
+    where: {
+      id: commentId,
+    },
+  });
+
+  const prevNum = prevComment.like_num;
+
+  await Comment.update(
+    {
+      like_num: prevNum + 1,
+    },
+    {
+      where: {
+        id: commentId,
+      },
+    }
+  );
+};
+
 exports.updateBoardComment = async (boardId) => {
   const prevBoard = await Board.findOne({
     attributes: ["comment_num"],
@@ -138,7 +160,14 @@ exports.createBoard = async (category, userId, title, content, isSecret) => {
 
 exports.getComment = async (boardId) => {
   return await Comment.findAll({
-    attributes: ["created_at", "content", "is_secret"],
+    attributes: [
+      "id",
+      "created_at",
+      "content",
+      "is_secret",
+      "like_num",
+      "user_id",
+    ],
     where: {
       board_id: boardId,
     },

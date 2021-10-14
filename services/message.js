@@ -1,23 +1,14 @@
 const Op = require("sequelize").Op;
-const { Message } = require("../models");
+const { Message, sequelize } = require("../models");
 
 exports.getMessage = async (userId) => {
-  return await Message.findAll({
-    where: {
-      [Op.or]: [
-        {
-          from_id: userId,
-        },
-        {
-          to_id: userId,
-        },
-      ],
-    },
-  });
+  const rawQuery = `SELECT * FROM messages WHERE (from_id = ${userId} or to_id = ${userId}) and created_at IN (SELECT max(created_at) FROM messages GROUP BY from_id, to_id) ORDER BY created_at DESC`;
+  return await sequelize.query(rawQuery, { type: sequelize.QueryTypes.SELECT });
 };
 
 exports.getMessageDetail = async (toId, fromId) => {
   return await Message.findAll({
+    attributes: ["id", "content", "created_at", "from_id", "to_id"],
     where: {
       [Op.or]: [
         {
@@ -30,10 +21,11 @@ exports.getMessageDetail = async (toId, fromId) => {
         },
       ],
     },
+    order: [["created_at", "DESC"]],
   });
 };
 
-exports.sendMessage = async (fromId, toId) => {
+exports.sendMessage = async (content, fromId, toId) => {
   return await Message.create({
     content,
     from_id: fromId,

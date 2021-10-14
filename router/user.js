@@ -6,28 +6,26 @@ const passport = require("passport");
 const { isLoggedIn, isNotLoggedIn } = require("../middleware");
 const userService = require("../services/user");
 
-router.get("/test", (req, res) => {
-  return res.send({ test: "good" });
-});
-
-router.get("/test2", (req, res) => {
-  return res.send({ tset: req.user });
-});
-
-router.get("/", isLoggedIn, async (req, res) => {
-  const result = await userService.getUser(req.user.id);
-
-  if (result) {
+router.get("/", async (req, res) => {
+  if (!req.isAuthenticated()) {
     return res.status(200).send({
-      success: true,
-      data: result,
-    });
-  } else {
-    return res.status(400).send({
       success: false,
       data: {},
-      message: "server error",
     });
+  } else {
+    const result = await userService.getUser(req.user.id);
+    if (result) {
+      return res.status(200).send({
+        success: true,
+        data: result,
+      });
+    } else {
+      return res.status(400).send({
+        success: false,
+        data: {},
+        message: "server error",
+      });
+    }
   }
 });
 

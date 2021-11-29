@@ -58,9 +58,9 @@ db.Board.belongsTo(db.BoardCategory, { foreignKey: "board_category_id" }); //카
 db.Comment.belongsTo(db.Board, { foreignKey: "board_id" });
 db.Comment.belongsTo(db.User, { foreignKey: "user_id" });
 
-db.Recomment.belongsTo(db.Comment, { foreignKey: "comment_id" });
-db.Recomment.belongsTo(db.User, { foreignKey: "user_id" });
-db.EmailAuth.belongsTo(db.User, { foreignKey: "user_id" });
+// db.Recomment.belongsTo(db.Comment, { foreignKey: "comment_id" });
+// db.Recomment.belongsTo(db.User, { foreignKey: "user_id" });
+// db.EmailAuth.belongsTo(db.User, { foreignKey: "user_id" });
 
 db.Liked.belongsTo(db.User, { foreignKey: "user_id" });
 

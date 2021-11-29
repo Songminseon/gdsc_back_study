@@ -4,7 +4,7 @@ const { Board, Comment, User, sequelize } = require("../models");
 
 exports.getMainBoard = async () => {
   const rawQuery =
-    "SELECT * FROM boards WHERE board_category_id <= 6  and created_at IN (SELECT MAX(created_at) FROM boards GROUP BY board_category_id)";
+    "SELECT * FROM boards WHERE board_category_id <= 6  and created_at IN (SELECT MAX(created_at) FROM boards GROUP BY board_category_id) GROUP BY board_category_id";
   return await sequelize.query(rawQuery, { type: sequelize.QueryTypes.SELECT });
 };
 
@@ -91,7 +91,7 @@ exports.updateBoardLike = async (boardId) => {
   });
 
   const prevNum = prevBoard.like_num;
-
+  
   await Board.update(
     {
       like_num: prevNum + 1,

@@ -1,5 +1,5 @@
 const Op = require("sequelize").Op;
-const { Message, sequelize } = require("../models");
+const { Message, sequelize, Comment } = require("../models");
 
 exports.getMessage = async (userId) => {
   const rawQuery = `SELECT * FROM messages WHERE (from_id = ${userId} or to_id = ${userId}) and created_at IN (SELECT max(created_at) FROM messages GROUP BY from_id, to_id) ORDER BY created_at DESC`;
@@ -41,5 +41,15 @@ exports.deleteMessage = async (fromId, toId) => {
         { from_id: toId, to_id: fromId },
       ],
     },
+  });
+};
+
+exports.getToId = async (commentId) => {
+  return await Comment.findOne({
+    attributes: ["user_id"],
+    where: {
+      id: commentId,
+    },
+    raw: true,
   });
 };

@@ -6,7 +6,7 @@ const messageService = require("../services/message");
 
 router.get("/", async (req, res) => {
   const result = await messageService.getMessage(req.user.id);
-  console.log(result);
+
   if (result) {
     banList = [];
     newResult = [];
@@ -47,7 +47,7 @@ router.get("/", async (req, res) => {
 router.get("/detail/:id", async (req, res) => {
   const otherId = req.params.id;
   const result = await messageService.getMessageDetail(req.user.id, otherId);
-  console.log(result);
+
   if (result) {
     return res.status(200).send({
       success: true,
@@ -62,7 +62,11 @@ router.get("/detail/:id", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { content, to_id } = req.body;
+  const { content, comment_id } = req.body;
+  const toId = await messageService.getToId(comment_id);
+
+  const to_id = toId.user_id;
+
   if (to_id === req.user.id) {
     return res.status(200).send({
       success: false,

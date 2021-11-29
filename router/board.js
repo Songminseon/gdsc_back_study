@@ -4,8 +4,9 @@ const router = express.Router();
 
 const boardService = require("../services/board");
 
-router.get("/:category", async (req, res) => {
-  const category = req.params.category;
+router.get("/", async (req, res) => {
+  const category = req.query.category; // toDo: front에서 axios요청 수정해야함
+
   let result;
 
   if (category === "7") {
@@ -178,12 +179,7 @@ router.get("/:id/comment", async (req, res) => {
 router.post("/comment", async (req, res) => {
   const { board_id, content, is_secret } = req.body;
 
-  const result = await boardService.createComment(
-    req.user.id,
-    board_id,
-    content,
-    is_secret
-  );
+  const result = await boardService.createComment(req.user.id, board_id, content, is_secret);
 
   if (result) {
     boardService.updateBoardComment(board_id);
